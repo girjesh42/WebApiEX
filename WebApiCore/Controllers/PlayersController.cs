@@ -52,7 +52,7 @@ namespace WebApiCore.Controllers
             else
             {
                 listPlayers.RemoveAll(p => p.PId == id);
-                return Ok(result);
+                return NoContent();
             }
 
         }
@@ -61,8 +61,16 @@ namespace WebApiCore.Controllers
         {
             try
             {
-                listPlayers.Add(p);
-                return NoContent();
+                if(listPlayers.Count(x => x.PId == p.PId) >= 1)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    listPlayers.Add(p);
+                    return NoContent();
+                }
+                
             }
             catch
             {
@@ -88,7 +96,7 @@ namespace WebApiCore.Controllers
                 }
                 catch
                 {
-                    return NotFound();
+                    return BadRequest();
                 }
             }
 
