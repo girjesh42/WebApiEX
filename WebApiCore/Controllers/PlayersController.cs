@@ -26,5 +26,72 @@ namespace WebApiCore.Controllers
         {
             return listPlayers;
         }
+
+        [HttpGet("{id}")]
+        public ActionResult Get(int id)
+        {
+            var result = listPlayers.SingleOrDefault(p => p.PId == id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(result);
+            }
+
+        }
+        [HttpDelete("{id}")]
+        public ActionResult Delete (int id)
+        {
+            var result = listPlayers.SingleOrDefault(p => p.PId == id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                listPlayers.RemoveAll(p => p.PId == id);
+                return Ok(result);
+            }
+
+        }
+        [HttpPost]
+        public ActionResult Insert([FromBody] Player p)
+        {
+            try
+            {
+                listPlayers.Add(p);
+                return NoContent();
+            }
+            catch
+            {
+                return NotFound();
+            }
+        }
+        [HttpPut("{id}")]
+        public ActionResult Update([FromBody] Player player,int id)
+        {
+            var result = listPlayers.SingleOrDefault(p => p.PId == id);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                try
+                {
+                    result.PName = player.PName;
+                    result.PDob = player.PDob;
+                    result.PTeam = player.PTeam;
+                    return NoContent();
+                }
+                catch
+                {
+                    return NotFound();
+                }
+            }
+
+        }
     }
 }
